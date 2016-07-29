@@ -87,3 +87,9 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Ignore VENV files
+bin
+include
+lib
+pip-selfcheck.json
