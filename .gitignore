@@ -95,4 +95,4 @@ lib
 pip-selfcheck.json
 
 # Ignore local database
-db
+static/db

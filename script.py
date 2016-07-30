@@ -4,9 +4,9 @@ import os
 from richxerox import *
 from tinydb import TinyDB, where
 
-HOME_DIR = 'db'
+HOME_DIR = 'static/db'
 # Create directory if it doesn't exist
-os.system("mkdir db")
+os.system("mkdir %s" % HOME_DIR)
 db = TinyDB('%s/db.json' % HOME_DIR)
 currently_found_in_clipboard = paste(format='text')
 while True:

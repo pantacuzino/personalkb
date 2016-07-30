@@ -23,7 +23,7 @@
     <script id="template" type="x-tmpl-mustache">
       <div class="col-sm-4">
         <p>{{content}}</p>
-        <a href="http://0.0.0.0:8000/db/{{screenshot}}"><img src="{{screenshot}}" style="width: 100%" /></a>
+        <a href="http://0.0.0.0:8080/{{screenshot}}"><img src="{{screenshot}}" style="width: 100%" /></a>
       </div>
     </script>
   </head>
@@ -36,25 +36,35 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.2.1/mustache.min.js"></script>
     <script type="text/javascript">
+      function renderItems(entries) {
+        var template = $('#template').html();
+        Mustache.parse(template);   // optional, speeds up future uses
+        for(var i=0; i < entries.length; i++ ) {
+          var rendered = Mustache.render(template,
+                { content: entries[i].content.text,
+                screenshot: entries[i].screenshot });
+          $('.row').append(rendered);
+        }
+      };
+    </script>
+    <script type="text/javascript">
       var db = {};
-      var template = $('#template').html();
-      Mustache.parse(template);   // optional, speeds up future uses
-      $.getJSON("/db/db.json", function(data) {
+      $.getJSON("/static/db/db.json", function(data) {
         db = data;
         var table_name = "_default";
         var i = 1;
+        var entries = [];
         while(true) {
             if(db[table_name][i] == undefined) {
               break;
             }
             else {
-              var rendered = Mustache.render(template,
-                    { content: db[table_name][i].content.text,
-                      screenshot: db[table_name][i].screenshot });
-              $('.row').append(rendered);
+              entries.push(db[table_name][i]);
               i++;
             }
         }
+        entries = entries.sort(function(a, b) { parseInt(b.created_at) > parseInt(a.created_at) });
+        renderItems(entries);
       });
     </script>
   </body>
