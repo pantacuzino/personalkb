@@ -1,16 +1,17 @@
 """
-RUN with python -m SimpleHTTPServer 8000
+RUN with python server.py
 
-Serves static files relative to the current running directory
+Serves static files in the /static directory
 """
+import web
 
-import SimpleHTTPServer
-import SocketServer
+urls = (
+    '/(.*)', 'knowledgebase'
+)
+app = web.application(urls, globals())
 
-PORT = 8000
+class knowledgebase:
+    pass
 
-handler = SimpleHTTPServer.SimpleHTTPRequestHandler
-
-httpd = SocketServer.TCPServer(("", PORT), handler)
-
-httpd.serve_forever()
+if __name__ == "__main__":
+    app.run()
